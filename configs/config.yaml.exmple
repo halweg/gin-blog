@@ -1,0 +1,24 @@
+Server:
+  RunMode: debug
+  HttpPort : 80
+  ReadTimeout : 60
+  WriteTimeout : 60
+
+App:
+  DefaultPageSize: 10
+  MaxPageSize : 100
+  LogSavePath : storage/logs
+  LogFileName: app
+  LogFileExt : .log
+
+DataBase:
+  DBType: mysql
+  UserName: root
+  PassWord: root
+  Host: 127.0.0.1
+  DBName: go_blog
+  TablePreFix: blog
+  Charset: utf8
+  ParseTime: True
+  MaxIdleConns: 10
+  MaxOpenConns: 30
