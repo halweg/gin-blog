@@ -33,10 +33,15 @@ func init() {
 
 }
 
+// @title gin框架crud api example
+// @version 1.0
+// @description golang gin framework application
+// @termsOfService https://github.com/halweg/gin-blog
 func main() {
     gin.SetMode(global.ServerSettings.RunMode)
     router := route.NewRouter()
     global.Logger.Infof("%s:gin-blog is start! /%s", "halweg", "blog-service")
+
 
     s := &http.Server{
         Addr: ":" + global.ServerSettings.HttpPort,
@@ -47,7 +52,6 @@ func main() {
     }
 
     s.ListenAndServe()
-
 
 }
 

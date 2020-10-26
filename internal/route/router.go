@@ -2,7 +2,10 @@ package route
 
 import (
     "github.com/gin-gonic/gin"
+    _ "github.com/halweg/gin-blog/docs"
     v1 "github.com/halweg/gin-blog/internal/route/v1"
+    swaggerFiles "github.com/swaggo/files"
+    ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func NewRouter() *gin.Engine {
@@ -28,6 +31,8 @@ func NewRouter() *gin.Engine {
         apiv1.GET("/articles", article.List)
 
     }
+
+    r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
     return r
 }
