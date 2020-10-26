@@ -15,6 +15,7 @@ func (t Tag) Get(c *gin.Context)  {
 }
 
 func (t Tag) List(c *gin.Context) {
+    c.String(200, "Hello World")
 
 }
 
