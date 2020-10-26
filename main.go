@@ -5,7 +5,9 @@ import (
     "github.com/halweg/gin-blog/global"
     "github.com/halweg/gin-blog/internal/model"
     "github.com/halweg/gin-blog/internal/route"
+    "github.com/halweg/gin-blog/pkg/logger"
     "github.com/halweg/gin-blog/pkg/settings"
+    "gopkg.in/natefinch/lumberjack.v2"
     "log"
     "net/http"
     "time"
@@ -23,11 +25,18 @@ func init() {
         log.Fatalf("init.setupDBEngine err : %v", err)
     }
 
+    err = setupLogger()
+
+    if err != nil {
+        log.Fatalf("init.setupLogger err %v", err)
+    }
+
 }
 
 func main() {
     gin.SetMode(global.ServerSettings.RunMode)
     router := route.NewRouter()
+    global.Logger.Infof("%s:gin-blog is start! /%s", "halweg", "blog-service")
 
     s := &http.Server{
         Addr: ":" + global.ServerSettings.HttpPort,
@@ -38,6 +47,8 @@ func main() {
     }
 
     s.ListenAndServe()
+
+
 }
 
 func setupSettings() error{
@@ -77,5 +88,15 @@ func setupDBEngine()  error {
         return err
     }
 
+    return nil
+}
+
+func setupLogger() error {
+    global.Logger = logger.NewLogger(&lumberjack.Logger{
+        Filename:   global.AppSettings.LogSavePath  + "/" +global.AppSettings.LogFileName + "/" + global.AppSettings.LogFileExt ,
+        MaxSize:    600,
+        MaxAge:     10,
+        LocalTime:  true,
+    }, "", log.LstdFlags).WithCaller(2)
     return nil
 }
