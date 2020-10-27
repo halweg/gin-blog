@@ -2,7 +2,7 @@ package app
 
 import (
     "github.com/gin-gonic/gin"
-    "github.com/halweg/gin-blog/pkg/errorcode"
+    "github.com/halweg/gin-blog/pkg/errcode"
     "net/http"
 )
 
@@ -39,7 +39,7 @@ func (r *Response) ToResponseList(list interface{}, totalRows int ) {
     })
 }
 
-func (r *Response) ToResponseError(err *errorcode.Error) {
+func (r *Response) ToResponseError(err *errcode.Error) {
     res := gin.H{"code" : err.Code(), "msg": err.Msg()}
     details := err.Details()
 

@@ -1,4 +1,4 @@
-package errorcode
+package errcode
 
 import (
     "fmt"
@@ -9,6 +9,12 @@ type Error struct {
     code int `json:"code"`
     msg string `json:"msg"`
     details []string `json:"details"`
+}
+
+type ErrorSwagger struct {
+    Code int `json:"code"`
+    Msg string `json:"msg"`
+    Details []string `json:"details"`
 }
 
 var codes = map[int]string{}

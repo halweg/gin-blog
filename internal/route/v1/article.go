@@ -3,7 +3,7 @@ package v1
 import (
     "github.com/gin-gonic/gin"
     "github.com/halweg/gin-blog/pkg/app"
-    "github.com/halweg/gin-blog/pkg/errorcode"
+    "github.com/halweg/gin-blog/pkg/errcode"
 )
 
 type Article struct {
@@ -20,7 +20,7 @@ func (t Article) Get(c *gin.Context)  {
 
 func (t Article) List(c *gin.Context) {
 
-    app.NewResponse(c).ToResponseError(errorcode.ServerError)
+    app.NewResponse(c).ToResponseError(errcode.ServerError)
     return
 
 }
