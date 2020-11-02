@@ -3,10 +3,16 @@ package v1
 import (
     "github.com/gin-gonic/gin"
     "github.com/halweg/gin-blog/global"
+    _ "github.com/halweg/gin-blog/global"
     _ "github.com/halweg/gin-blog/internal/model"
+    "github.com/halweg/gin-blog/internal/service"
+    _ "github.com/halweg/gin-blog/internal/service"
     "github.com/halweg/gin-blog/pkg/app"
+    _ "github.com/halweg/gin-blog/pkg/app"
     "github.com/halweg/gin-blog/pkg/errcode"
     _ "github.com/halweg/gin-blog/pkg/errcode"
+    _ "github.com/halweg/gin-blog/pkg/errcode"
+    "net/http"
 )
 
 
@@ -39,20 +45,19 @@ func (t Tag) Get(c *gin.Context)  {
 // @Failure 500 {object} errcode.ErrorSwagger "内部错误"
 // @Router /api/v1/tags [get]
 func (t Tag) List(c *gin.Context) {
-    param := struct {
-        Name string `form:"name"binding:"max=100"`
-        State uint8 `form:"state"binding:"max=10"`
-    }{}
 
+    var data service.TagListRequest
     ret := app.NewResponse(c)
-    va, err := app.BindAndValid(c, &param)
-    if va == true {
-        global.Logger.Fatalf("app.BindAndValid errs:%v", err)
-        ret.ToResponseError(errcode.InvalidParams.WithDetails(err.Errors()...))
+    if valida, e := app.BindAndValid(c, &data); valida {
+        global.Logger.Debugf("app.BindAndValid errs:%v", e)
+        ret.ToResponseError(errcode.InvalidParams.WithDetails(e.Errors()...))
+        return
+    } else {
+        c.JSON(http.StatusOK, gin.H{
+            "data": data,
+        })
         return
     }
-    ret.ToResponse(gin.H{})
-    return
 }
 
 // @Summary 新增标签
