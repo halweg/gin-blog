@@ -2,7 +2,10 @@ package v1
 
 import (
     "github.com/gin-gonic/gin"
+    "github.com/halweg/gin-blog/global"
     _ "github.com/halweg/gin-blog/internal/model"
+    "github.com/halweg/gin-blog/pkg/app"
+    "github.com/halweg/gin-blog/pkg/errcode"
     _ "github.com/halweg/gin-blog/pkg/errcode"
 )
 
@@ -36,8 +39,20 @@ func (t Tag) Get(c *gin.Context)  {
 // @Failure 500 {object} errcode.ErrorSwagger "内部错误"
 // @Router /api/v1/tags [get]
 func (t Tag) List(c *gin.Context) {
-    c.String(200, "Hello World")
+    param := struct {
+        Name string `form:"name"binding:"max=100"`
+        State uint8 `form:"state"binding:"max=10"`
+    }{}
 
+    ret := app.NewResponse(c)
+    va, err := app.BindAndValid(c, &param)
+    if va == true {
+        global.Logger.Fatalf("app.BindAndValid errs:%v", err)
+        ret.ToResponseError(errcode.InvalidParams.WithDetails(err.Errors()...))
+        return
+    }
+    ret.ToResponse(gin.H{})
+    return
 }
 
 // @Summary 新增标签
